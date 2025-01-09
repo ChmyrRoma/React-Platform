@@ -1,4 +1,6 @@
-import GlobalLayout from "@/app/components/layout/GlobalLayout";
+'use client';
+
+import GlobalLayout from "@/app/layouts/GlobalLayout";
 
 const EditUser = () => {
     return (
