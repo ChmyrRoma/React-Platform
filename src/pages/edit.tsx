@@ -1,4 +1,4 @@
-import GlobalLayout from "@/app/components/layout/GlobalLayout";
+import GlobalLayout from "@/app/layouts/GlobalLayout";
 
 const EditUser = () => {
     return (
