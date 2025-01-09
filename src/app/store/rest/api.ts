@@ -83,9 +83,27 @@ const editUser = (updatedUser: IUser): Promise<IUser[]> =>
         return users;
     });
 
+const deleteUser = (userId: string | undefined): Promise<IUser[]> =>
+    apiRequest(() => {
+        const storedUsers = localStorage.getItem(USERS);
+        if (!storedUsers) return [];
+
+        const users: IUser[] = JSON.parse(storedUsers);
+
+        const userIndex = users.findIndex(user => user.id === userId);
+        if (userIndex === -1) {
+            throw new Error(`User with id ${userId} not found`);
+        }
+
+        users.splice(userIndex, 1);
+        localStorage.setItem(USERS, JSON.stringify(users));
+        return users;
+    });
+
 export const api = {
     getUsers,
     getFilters,
     addUser,
-    editUser
+    editUser,
+    deleteUser
 };

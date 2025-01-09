@@ -68,3 +68,25 @@ export const editUser = createAsyncThunk(
         }
     }
 );
+
+export const deleteUser = createAsyncThunk(
+    "users/deleteUser",
+    async (userId: string | undefined, thunkAPI) => {
+        thunkAPI.dispatch(usersSliceActions.setLoading(true));
+        try {
+            const response = await api.deleteUser(userId);
+
+            if (response) {
+                thunkAPI.dispatch(usersSliceActions.getUsers(response));
+            }
+
+            return response;
+        } catch (error) {
+            console.error("Error deleting user:", error);
+            return thunkAPI.rejectWithValue("Failed to delete user");
+        } finally {
+            thunkAPI.dispatch(usersSliceActions.setLoading(false));
+        }
+    }
+);
+
