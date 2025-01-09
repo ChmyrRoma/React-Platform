@@ -4,9 +4,9 @@ import { SelectChangeEvent, Stack, Typography } from "@mui/material";
 import { CustomSelect } from "@/app/components/common/CustomSelect/CustomSelect";
 
 import { useAppDispatch, useAppSelector } from "@/app/store/hooks";
+import { editUser, fetchFilters, fetchUsers } from "@/app/store/slices";
 
 import styles from './editUser.module.scss';
-import { fetchFilters, fetchUsers } from "@/app/store/slices";
 
 const EditUser = () => {
     const dispatch = useAppDispatch();
@@ -18,6 +18,19 @@ const EditUser = () => {
     const [selectedCountry, setSelectedCountry] = useState<string>('');
     const [selectedStatus, setSelectedStatus] = useState<string>('');
     const [selectedDepartment, setSelectedDepartment] = useState<string>('');
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+
+    const [initialUserData, setInitialUserData] = useState<{
+        name: string;
+        country: string;
+        status: string;
+        department: string;
+    }>({
+        name: '',
+        country: '',
+        status: '',
+        department: ''
+    });
 
     const handleChange = (event: SelectChangeEvent) => {
         setUserName(event.target.value)
@@ -33,7 +46,7 @@ const EditUser = () => {
 
     const usersName = useMemo(() => {
         return users.map(el => el.name);
-    }, [users])
+    }, [users]);
 
     useEffect(() => {
         dispatch(fetchFilters());
@@ -50,7 +63,59 @@ const EditUser = () => {
             setSelectedCountry(user.country.value);
             setSelectedStatus(user.status.value);
             setSelectedDepartment(user.department.value);
+
+            setInitialUserData({
+                name: user.name,
+                country: user.country.value,
+                status: user.status.value,
+                department: user.department.value
+            });
         }
+    };
+
+    const onSubmit = async () => {
+        setIsLoading(true);
+        const userToUpdate = users.find((u) => u.name === selectedUserName);
+
+        if (userToUpdate) {
+            const updatedUser = {
+                ...userToUpdate,
+                name: userName,
+                country: {
+                    ...userToUpdate.country,
+                    value: selectedCountry,
+                },
+                status: {
+                    ...userToUpdate.status,
+                    value: selectedStatus,
+                },
+                department: {
+                    ...userToUpdate.department,
+                    value: selectedDepartment,
+                },
+            };
+
+            await dispatch(editUser(updatedUser))
+                .unwrap()
+                .then(() => {
+                    console.log("User updated successfully");
+                })
+                .catch((error) => {
+                    console.error("Error updating user:", error);
+                });
+        }
+        setIsLoading(false);
+        setUserName('');
+        setSelectedCountry('');
+        setSelectedStatus('');
+        setSelectedDepartment('');
+    };
+
+    const handleUndo = () => {
+        setUserName(initialUserData.name);
+        setSelectedCountry(initialUserData.country);
+        setSelectedStatus(initialUserData.status);
+        setSelectedDepartment(initialUserData.department);
     };
 
     return (
@@ -117,18 +182,18 @@ const EditUser = () => {
                 </div>
                 <div className={styles.editUser__footer}>
                     <div className={`${styles.editUser__footer_button} ${!editedField && styles.editUser__footer_buttonEdited}`}>
-                        Undo
+                        <div onClick={handleUndo}>Undo</div>
                     </div>
                     <div
-                        className={`${styles.editUser__footer_button} ${!disabledButton && styles.editUser__footer_buttonDisabled}`}
-                        // onClick={onSubmit}
+                        className={`${styles.editUser__footer_button} ${(!disabledButton || isLoading) && styles.editUser__footer_buttonDisabled}`}
+                        onClick={onSubmit}
                     >
-                        Save
+                        {!isLoading ? 'Save' : 'Loading...' }
                     </div>
                 </div>
             </div>
         </div>
-    )
+    );
 }
 
 export default EditUser;

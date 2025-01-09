@@ -22,7 +22,15 @@ const isBrowser = typeof window !== "undefined";
 
 const initializeData = (key: string, data: IUser[] | ICountry[] | IDepartment[] | IStatus[]) => {
     if (isBrowser && !localStorage.getItem(key)) {
-        localStorage.setItem(key, JSON.stringify(data));
+        if (key === USERS) {
+            const usersWithId = (data as IUser[]).map((user, index) => ({
+                ...user,
+                id: `user-${index}-${Date.now()}`
+            }));
+            localStorage.setItem(key, JSON.stringify(usersWithId));
+        } else {
+            localStorage.setItem(key, JSON.stringify(data));
+        }
     }
 };
 
@@ -58,8 +66,26 @@ const addUser = (user: IUser): Promise<IUser[]> =>
         return users;
     });
 
+const editUser = (updatedUser: IUser): Promise<IUser[]> =>
+    apiRequest(() => {
+        const storedUsers = localStorage.getItem(USERS);
+        if (!storedUsers) return [];
+
+        const users: IUser[] = JSON.parse(storedUsers);
+
+        const userIndex = users.findIndex(user => user.id === updatedUser.id);
+        if (userIndex === -1) {
+            throw new Error(`User with id ${updatedUser.id} not found`);
+        }
+
+        users[userIndex] = { ...users[userIndex], ...updatedUser };
+        localStorage.setItem(USERS, JSON.stringify(users));
+        return users;
+    });
+
 export const api = {
     getUsers,
     getFilters,
-    addUser
+    addUser,
+    editUser
 };
