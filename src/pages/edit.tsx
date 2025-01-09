@@ -1,13 +1,14 @@
 'use client';
 
 import GlobalLayout from "@/app/layouts/GlobalLayout";
+import EditUser from "@/app/components/business/EditUser/EditUser";
 
-const EditUser = () => {
+const EditUserPage = () => {
     return (
         <GlobalLayout>
-            Edit
+            <EditUser />
         </GlobalLayout>
     )
 }
 
-export default EditUser;
+export default EditUserPage;

@@ -47,3 +47,24 @@ export const addUser = createAsyncThunk(
         return response;
     }
 );
+
+export const editUser = createAsyncThunk(
+    "users/editUser",
+    async (updatedUser: IUser, thunkAPI) => {
+        thunkAPI.dispatch(usersSliceActions.setLoading(true));
+        try {
+            const response = await api.editUser(updatedUser);
+
+            if (response) {
+                thunkAPI.dispatch(usersSliceActions.getUsers(response));
+            }
+
+            return response;
+        } catch (error) {
+            console.error("Error updating user:", error);
+            return thunkAPI.rejectWithValue("Failed to update user");
+        } finally {
+            thunkAPI.dispatch(usersSliceActions.setLoading(false));
+        }
+    }
+);
