@@ -17,7 +17,9 @@ const GlobalLayout = ({ children }: IGlobalLayout) => {
         <div>
             <Provider store={store}>
                 <Header />
-                {children}
+                <div className="content">
+                    {children}
+                </div>
             </Provider>
         </div>
     )
