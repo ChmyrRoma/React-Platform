@@ -1,11 +1,11 @@
 import GlobalLayout from "@/app/components/layout/GlobalLayout";
 
-const Home = () => {
+const EditUser = () => {
     return (
         <GlobalLayout>
-            Users
+            Edit
         </GlobalLayout>
     )
 }
 
-export default Home;
+export default EditUser;
