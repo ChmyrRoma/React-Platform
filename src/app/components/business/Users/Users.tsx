@@ -127,7 +127,7 @@ const Users = () => {
             setSelectedCountryFilter('');
         }
 
-        if (selectedCountry && selectedStatus) {
+        if (selectedCountryFilter && selectedStatusFilter) {
             setDepartmentsName([]);
         }
     }, [departmentsName, selectedCountryFilter, selectedStatusFilter]);

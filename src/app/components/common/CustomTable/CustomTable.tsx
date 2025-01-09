@@ -24,7 +24,7 @@ export const CustomTable = ({ data, onDelete }: ICustomTable) => {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {data.length ? (data.map((row, index) => (
+                    {data.map((row, index) => (
                         <TableRow key={index}>
                             <TableCell>{row.name}</TableCell>
                             <TableCell sx={{ color: 'silver' }} align="left">{row.department.name}</TableCell>
@@ -32,9 +32,7 @@ export const CustomTable = ({ data, onDelete }: ICustomTable) => {
                             <TableCell sx={{ color: 'silver' }} align="left">{row.status.name}</TableCell>
                             <TableCell><DeleteIcon className={styles.table__container_delete} onClick={() => onDelete(row.id)} /></TableCell>
                         </TableRow>
-                    ))) : (
-                        <div>No users</div>
-                    )}
+                    ))}
                 </TableBody>
             </Table>
         </TableContainer>
