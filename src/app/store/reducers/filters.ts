@@ -1,21 +1,29 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice } from "@reduxjs/toolkit";
+
+import { ICountry, IDepartment, IStatus } from "@/app/types";
 
 export interface IFiltersReducer {
-    users: object[];
+    countries: ICountry[];
+    departments: IDepartment[];
+    statuses: IStatus[];
     isLoading: boolean;
 }
 
 const initialState = {
-    filtersSlice: [],
+    countries: [],
+    departments: [],
+    statuses: [],
     isLoading: true,
-} as unknown as IFiltersReducer;
+} as IFiltersReducer;
 
 export const filtersSlice = createSlice({
     name: 'filters',
     initialState,
     reducers: {
         getFilters: (state, action) => {
-            state.users = action.payload;
+            state.countries = action.payload.countries;
+            state.departments = action.payload.departments;
+            state.statuses = action.payload.statuses;
         },
         setLoading: (state, action) => {
             state.isLoading = action.payload;

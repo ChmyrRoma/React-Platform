@@ -1,3 +1,5 @@
+'use client';
+
 import GlobalLayout from "@/app/layouts/GlobalLayout";
 
 const EditUser = () => {
