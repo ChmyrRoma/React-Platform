@@ -7,11 +7,12 @@ import styles from "./customTable.module.scss";
 
 interface ICustomTable {
     data: IUser[];
+    onDelete: (id: string | undefined) => void;
 }
 
 const HEADER_COLUMNS: string[] = ['Full Name', 'Department', 'Country', 'Status', ''];
 
-export const CustomTable = ({ data }: ICustomTable) => {
+export const CustomTable = ({ data, onDelete }: ICustomTable) => {
     return (
         <TableContainer className={styles.table} component={Paper}>
             <Table className={styles.table__container}>
@@ -29,7 +30,7 @@ export const CustomTable = ({ data }: ICustomTable) => {
                             <TableCell sx={{ color: 'silver' }} align="left">{row.department.name}</TableCell>
                             <TableCell sx={{ color: 'silver' }} align="left">{row.country.name}</TableCell>
                             <TableCell sx={{ color: 'silver' }} align="left">{row.status.name}</TableCell>
-                            <TableCell><DeleteIcon className={styles.table__container_delete} /></TableCell>
+                            <TableCell><DeleteIcon className={styles.table__container_delete} onClick={() => onDelete(row.id)} /></TableCell>
                         </TableRow>
                     ))}
                 </TableBody>

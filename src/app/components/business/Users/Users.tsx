@@ -7,7 +7,7 @@ import { CustomModal } from "./CustomModal/CustomModal";
 import { CustomTable } from "@/app/components/common/CustomTable/CustomTable";
 
 import { useAppDispatch, useAppSelector } from "@/app/store/hooks";
-import { addUser, fetchFilters, fetchUsers } from "@/app/store/slices";
+import { addUser, deleteUser, fetchFilters, fetchUsers } from "@/app/store/slices";
 import { IUser } from "@/app/types";
 
 import styles from "./users.module.scss";
@@ -71,6 +71,10 @@ const Users = () => {
         handleClose();
     }
 
+    const onDelete = async (id: string | undefined) => {
+        dispatch(deleteUser(id))
+    }
+
     useEffect(() => {
         dispatch(fetchUsers());
         dispatch(fetchFilters());
@@ -99,7 +103,7 @@ const Users = () => {
                     onSubmit={onSubmit}
                 />
             </div>
-            <CustomTable data={users} />
+            <CustomTable data={users} onDelete={onDelete} />
         </div>
     )
 }
