@@ -1,7 +1,18 @@
 'use client';
 
 import { useState, useEffect, useMemo, useCallback } from "react";
-import { SelectChangeEvent, Typography } from "@mui/material";
+import {
+    FormControl,
+    SelectChangeEvent,
+    Typography,
+    InputLabel,
+    MenuItem,
+    Select,
+    OutlinedInput,
+    Checkbox,
+    ListItemText,
+    Stack
+} from "@mui/material";
 
 import { CustomModal } from "./CustomModal/CustomModal";
 import { CustomTable } from "@/app/components/common/CustomTable/CustomTable";
@@ -11,6 +22,17 @@ import { addUser, deleteUser, fetchFilters, fetchUsers } from "@/app/store/slice
 import { IUser } from "@/app/types";
 
 import styles from "./users.module.scss";
+import {CustomSelect} from "@/app/components/common/CustomSelect/CustomSelect";
+import DeleteIcon from "@mui/icons-material/Delete";
+
+const MenuProps = {
+    PaperProps: {
+        style: {
+            maxHeight: 300,
+            width: 150,
+        },
+    },
+};
 
 const Users = () => {
     const { users } = useAppSelector(state => state.users);
@@ -21,7 +43,19 @@ const Users = () => {
     const [userName, setUserName] = useState<string>('');
     const [selectedCountry, setSelectedCountry] = useState<string>('');
     const [selectedStatus, setSelectedStatus] = useState<string>('');
+    const [selectedCountryFilter, setSelectedCountryFilter] = useState<string>('');
+    const [selectedStatusFilter, setSelectedStatusFilter] = useState<string>('');
     const [selectedDepartment, setSelectedDepartment] = useState<string>('');
+    const [departmentsName, setDepartmentsName] = useState<string[]>([]);
+
+    const handleChangeDepartments = (event: SelectChangeEvent<typeof departmentsName>) => {
+        const {
+            target: { value },
+        } = event;
+        setDepartmentsName(
+            typeof value === 'string' ? value.split(',') : value,
+        );
+    };
 
     const handleOpen = () => setOpen(true);
 
@@ -75,16 +109,70 @@ const Users = () => {
         dispatch(deleteUser(id))
     }
 
+    const onClearFilters = () => {
+        setSelectedStatusFilter('');
+        setSelectedCountryFilter('');
+        setDepartmentsName([]);
+
+    }
+
     useEffect(() => {
         dispatch(fetchUsers());
         dispatch(fetchFilters());
     }, []);
 
+    useEffect(() => {
+        if (departmentsName.length < 3) {
+            setSelectedStatusFilter('');
+            setSelectedCountryFilter('');
+        }
+
+        if (selectedCountry && selectedStatus) {
+            setDepartmentsName([]);
+        }
+    }, [departmentsName, selectedCountryFilter, selectedStatusFilter]);
+
     return (
         <div className={styles.users}>
             <Typography variant="h5" align="center">USERS</Typography>
             <div className={styles.users__container}>
-                <div className={styles.users__container_filters}></div>
+                <Stack direction="row" gap={3} alignItems="center" className={styles.users__container_filters}>
+                    <FormControl sx={{ width: 250, marginTop: '5px' }}>
+                        <InputLabel id="demo-multiple-checkbox-label">Selected</InputLabel>
+                        <Select
+                            labelId="demo-multiple-checkbox-label"
+                            id="demo-multiple-checkbox"
+                            multiple
+                            value={departmentsName}
+                            onChange={handleChangeDepartments}
+                            input={<OutlinedInput label="Selected" />}
+                            renderValue={(selected) => selected.join(', ')}
+                            MenuProps={MenuProps}
+                        >
+                            {departments.map((element, index) => (
+                                <MenuItem key={index} value={element.name}>
+                                    <Checkbox checked={departmentsName.includes(element.name)} />
+                                    <ListItemText primary={element.name} />
+                                </MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
+                    <CustomSelect
+                        title="Select country"
+                        data={countries}
+                        disabled={departmentsName.length < 3}
+                        value={selectedCountryFilter}
+                        setSelected={setSelectedCountryFilter}
+                    />
+                    <CustomSelect
+                        title="All Statuses"
+                        data={statuses}
+                        disabled={departmentsName.length < 3}
+                        value={selectedStatusFilter}
+                        setSelected={setSelectedStatusFilter}
+                    />
+                    <DeleteIcon className={styles.users__container_filtersIcon} onClick={onClearFilters} />
+                </Stack>
                 <CustomModal
                     open={open}
                     selectedCountry={selectedCountry}

@@ -9,7 +9,7 @@ body {
 
 .content {
     border: 1px solid black;
-    height: calc(100vh - 300px);
+    height: calc(100vh - 250px);
     margin: 80px 80px 0 80px;
     padding: 40px;
 }

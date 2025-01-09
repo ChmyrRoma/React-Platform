@@ -7,17 +7,18 @@ interface ICustomSelect {
     title: string;
     value: string;
     width?: string;
+    disabled?: boolean;
     setSelected: (event: string) => void;
     data: IStatus[] | ICountry[] | IDepartment[] | string[];
 }
 
-export const CustomSelect = ({ title, width, data, value, setSelected }: ICustomSelect) => {
+export const CustomSelect = ({ title, width, data, disabled, value, setSelected }: ICustomSelect) => {
     const handleChange = (event: SelectChangeEvent) => {
         setSelected(event.target.value as string);
     };
 
     return (
-        <Box sx={{ width: width || 250, marginTop: "5px" }}>
+        <Box sx={{ width: width || 250, marginTop: "5px", pointerEvents: disabled ? 'none' : 'auto' }}>
             <FormControl fullWidth>
                 <InputLabel>{title}</InputLabel>
                 <Select
