@@ -47,7 +47,17 @@ const getFilters = (): Promise<{
         return { countries, departments, statuses };
     });
 
+const addUser = (user: IUser): Promise<IUser[]> =>
+    apiRequest(() => {
+        const storedUsers = localStorage.getItem(USERS);
+        const users: IUser[] = storedUsers ? JSON.parse(storedUsers) : [];
+        users.push(user);
+        localStorage.setItem(USERS, JSON.stringify(users));
+        return users;
+    });
+
 export const api = {
     getUsers,
-    getFilters
+    getFilters,
+    addUser
 };
