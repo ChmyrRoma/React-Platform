@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { Typography } from "@mui/material";
 
 import { CustomModal } from "./CustomModal/CustomModal";
+import { CustomTable } from "@/app/components/common/CustomTable/CustomTable";
 
 import { useAppDispatch, useAppSelector } from "@/app/store/hooks";
 import { fetchFilters, fetchUsers } from "@/app/store/slices";
@@ -11,7 +12,8 @@ import { fetchFilters, fetchUsers } from "@/app/store/slices";
 import styles from "./users.module.scss";
 
 const Users = () => {
-    const { statuses, countries, departments } = useAppSelector(state => state.filters)
+    const { users } = useAppSelector(state => state.users);
+    const { statuses, countries, departments } = useAppSelector(state => state.filters);
     const dispatch = useAppDispatch();
 
     const [open, setOpen] = useState(false);
@@ -39,6 +41,7 @@ const Users = () => {
                     departments={departments}
                 />
             </div>
+            <CustomTable data={users} />
         </div>
     )
 }
