@@ -1,7 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+import { IUser } from "@/app/types";
+
 export interface IUsersReducer {
-    users: object[];
+    users: IUser[];
     isLoading: boolean;
 }
 

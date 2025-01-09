@@ -1,10 +1,9 @@
-import * as React from 'react';
 import { Paper, TableRow, TableHead, TableContainer, TableCell, TableBody, Table } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 
 import { IUser } from "@/app/types";
 
-import styles from './customTable.module.scss';
+import styles from "./customTable.module.scss";
 
 interface ICustomTable {
     data: IUser[];
