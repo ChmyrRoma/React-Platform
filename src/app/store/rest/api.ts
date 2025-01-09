@@ -61,7 +61,13 @@ const addUser = (user: IUser): Promise<IUser[]> =>
     apiRequest(() => {
         const storedUsers = localStorage.getItem(USERS);
         const users: IUser[] = storedUsers ? JSON.parse(storedUsers) : [];
-        users.push(user);
+
+        const newUserWithId = {
+            ...user,
+            id: `user-${users.length + 1}-${Date.now()}`,
+        };
+
+        users.push(newUserWithId);
         localStorage.setItem(USERS, JSON.stringify(users));
         return users;
     });

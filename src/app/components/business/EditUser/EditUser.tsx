@@ -126,7 +126,7 @@ const EditUser = () => {
                     <span className={styles.editUser__container_title}>User</span>
                     <CustomSelect
                         title="Select name"
-                        data={usersName}
+                        data={usersName.length ? usersName : ['No users']}
                         width="400px"
                         value={selectedUserName}
                         setSelected={handleUserNameChange}
