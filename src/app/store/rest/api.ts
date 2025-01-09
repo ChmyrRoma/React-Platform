@@ -18,8 +18,10 @@ export function apiRequest<T>(callback: () => T, delay = 300): Promise<T> {
     });
 }
 
+const isBrowser = typeof window !== "undefined";
+
 const initializeData = (key: string, data: IUser[] | ICountry[] | IDepartment[] | IStatus[]) => {
-    if (!localStorage.getItem(key)) {
+    if (isBrowser && !localStorage.getItem(key)) {
         localStorage.setItem(key, JSON.stringify(data));
     }
 };

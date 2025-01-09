@@ -21,5 +21,10 @@
 
     &__active {
         background-color: silver;
+        cursor: default;
+
+        &:hover {
+            box-shadow: none;
+        }
     }
 }

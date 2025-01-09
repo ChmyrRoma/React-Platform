@@ -6,18 +6,18 @@ import { ICountry, IDepartment, IStatus } from "@/app/types";
 interface ICustomSelect {
     title: string;
     value: string;
+    width?: string;
     setSelected: (event: string) => void;
-    data: IStatus[] | ICountry[] | IDepartment[];
+    data: IStatus[] | ICountry[] | IDepartment[] | string[];
 }
 
-export const CustomSelect = ({ title, data, value, setSelected }: ICustomSelect) => {
-
+export const CustomSelect = ({ title, width, data, value, setSelected }: ICustomSelect) => {
     const handleChange = (event: SelectChangeEvent) => {
         setSelected(event.target.value as string);
     };
 
     return (
-        <Box sx={{ width: 250, marginTop: '5px' }}>
+        <Box sx={{ width: width || 250, marginTop: "5px" }}>
             <FormControl fullWidth>
                 <InputLabel>{title}</InputLabel>
                 <Select
@@ -25,11 +25,22 @@ export const CustomSelect = ({ title, data, value, setSelected }: ICustomSelect)
                     label={title}
                     onChange={handleChange}
                 >
-                    {data.map((element) => (
-                        <MenuItem key={element.value} value={element.value}>{element.name}</MenuItem>
-                    ))}
+                    {data.map((element, index) => {
+                        if (typeof element === "string") {
+                            return (
+                                <MenuItem key={index} value={element}>
+                                    {element}
+                                </MenuItem>
+                            );
+                        }
+                        return (
+                            <MenuItem key={element.value} value={element.value}>
+                                {element.name}
+                            </MenuItem>
+                        );
+                    })}
                 </Select>
             </FormControl>
         </Box>
     );
-}
+};
