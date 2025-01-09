@@ -1,4 +1,3 @@
-import { useState, useMemo } from "react";
 import { Modal, SelectChangeEvent, Stack, Typography } from "@mui/material";
 
 import { CustomSelect } from "@/app/components/common/CustomSelect/CustomSelect";
@@ -8,27 +7,26 @@ import styles from "./customModal.module.scss";
 
 interface ICustomModal {
     open: boolean;
-    handleClose: () => void;
-    handleOpen: () => void;
+    selectedCountry: string;
+    selectedStatus: string;
+    selectedDepartment: string;
+    disabledButton: string;
     statuses: IStatus[];
     countries: ICountry[];
     departments: IDepartment[];
+    handleClose: () => void;
+    handleOpen: () => void;
+    setSelectedCountry: (e: string) => void;
+    setSelectedStatus: (e: string) => void;
+    setSelectedDepartment: (e: string) => void;
+    handleChange: (e: SelectChangeEvent) => void;
+    onSubmit: () => void;
 }
 
-export const CustomModal = ({ open, handleClose, handleOpen, statuses, countries, departments }: ICustomModal) => {
-    const [userName, setUserName] = useState<string>('');
-    const [selectedCountry, setSelectedCountry] = useState<string>('');
-    const [selectedStatus, setSelectedStatus] = useState<string>('');
-    const [selectedDepartment, setSelectedDepartment] = useState<string>('');
-
-    const handleChange = (event: SelectChangeEvent) => {
-        setUserName(event.target.value)
-    }
-
-    const disabledButton = useMemo(() => {
-        return userName && selectedCountry && selectedStatus && selectedDepartment;
-    }, [userName, selectedCountry, selectedDepartment, selectedStatus]);
-
+export const CustomModal = ({
+ open, selectedCountry, selectedStatus, selectedDepartment, disabledButton, statuses, countries, departments, handleClose, handleOpen,
+ setSelectedCountry, setSelectedStatus, setSelectedDepartment, handleChange, onSubmit
+}: ICustomModal) => {
     return (
         <div className={styles.page}>
             <div className={styles.page__button} onClick={handleOpen}>Add User</div>
@@ -79,7 +77,13 @@ export const CustomModal = ({ open, handleClose, handleOpen, statuses, countries
                         </div>
                         <div className={styles.modal__footer}>
                             <div className={styles.page__button} onClick={handleClose}>Cancel</div>
-                            <div className={`${styles.page__button} ${!disabledButton && styles.page__button_disabled}`}>Add</div>
+                            <div
+                                className={`${styles.page__button} 
+                                ${!disabledButton && styles.page__button_disabled}`}
+                                onClick={onSubmit}
+                            >
+                                Add
+                            </div>
                         </div>
                     </div>
                 </div>
