@@ -1,0 +1,17 @@
+.table {
+    overflow: auto;
+    height: 300px;
+    margin-top: 10px;
+
+    &__container {
+        min-width: 650px;
+
+        &_delete {
+            cursor: pointer;
+
+            &:hover {
+                opacity: 0.8;
+            }
+        }
+    }
+}
